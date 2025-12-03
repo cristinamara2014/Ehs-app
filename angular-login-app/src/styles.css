@@ -1,0 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap');
+
+/* You can add global styles to this file, and also import other style files */
+
+.ehs-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 3rem;
+  color: #0066cc;
+  letter-spacing: 1px;
+  margin: 0;
+  text-transform: uppercase;
+}

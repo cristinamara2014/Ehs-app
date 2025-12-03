@@ -1,0 +1,339 @@
+<div class="container-fluid">
+  <!-- Header -->
+  <header class="bg-light shadow-sm mb-4" style="height: 100px; padding: 10px 20px;">
+    <div class="d-flex justify-content-between align-items-center h-100">
+      <div class="d-flex align-items-center" style="height: 100%;">
+        <img src="Forvia.logo.png" alt="Forvia Logo" style="height: 100%; width: auto; object-fit: contain; background-color: #f8f9fa;" class="me-3">
+      </div>
+      <div class="flex-grow-1 text-center">
+        <h1 class="ehs-title">EHS-Demo</h1>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <div class="dropdown">
+        <button class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          <span class="me-2">
+            <svg *ngIf="currentLanguage === 'ro'" xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 3 2">
+              <rect width="1" height="2" fill="#002b7f"/>
+              <rect width="1" height="2" x="1" fill="#fcd116"/>
+              <rect width="1" height="2" x="2" fill="#ce1126"/>
+            </svg>
+            <svg *ngIf="currentLanguage === 'en'" xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 60 30">
+              <clipPath id="s"><path d="M0,0 v30 h60 v-30 z"/></clipPath>
+              <clipPath id="t"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath>
+              <g clip-path="url(#s)">
+                <path d="M0,0 v30 h60 v-30 z" fill="#012169"/>
+                <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/>
+                <path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#t)" stroke="#C8102E" stroke-width="4"/>
+                <path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/>
+                <path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/>
+              </g>
+            </svg>
+          </span>
+          <span>{{ currentLanguage === 'ro' ? 'RO' : 'EN' }}</span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+          <li><a class="dropdown-item d-flex align-items-center" href="#" (click)="changeLanguage('ro'); $event.preventDefault()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 3 2" class="me-2">
+              <rect width="1" height="2" fill="#002b7f"/>
+              <rect width="1" height="2" x="1" fill="#fcd116"/>
+              <rect width="1" height="2" x="2" fill="#ce1126"/>
+            </svg>
+            <span class="flex-grow-1">Română</span>
+            <i class="bi bi-check-circle-fill text-success" *ngIf="currentLanguage === 'ro'"></i>
+          </a></li>
+          <li><a class="dropdown-item d-flex align-items-center" href="#" (click)="changeLanguage('en'); $event.preventDefault()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 60 30" class="me-2">
+              <clipPath id="s2"><path d="M0,0 v30 h60 v-30 z"/></clipPath>
+              <clipPath id="t2"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath>
+              <g clip-path="url(#s2)">
+                <path d="M0,0 v30 h60 v-30 z" fill="#012169"/>
+                <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/>
+                <path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#t2)" stroke="#C8102E" stroke-width="4"/>
+                <path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/>
+                <path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/>
+              </g>
+            </svg>
+            <span class="flex-grow-1">English</span>
+            <i class="bi bi-check-circle-fill text-success" *ngIf="currentLanguage === 'en'"></i>
+          </a></li>
+        </ul>
+      </div>
+      <div class="dropdown">
+        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          {{ username }}
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+          <li><a class="dropdown-item" href="#"><i class="bi bi-person-circle me-2"></i>{{ translate('profile') }}</a></li>
+          <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>{{ translate('settings') }}</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="#" (click)="logout(); $event.preventDefault()"><i class="bi bi-box-arrow-right me-2"></i>{{ translate('logout') }}</a></li>
+        </ul>
+      </div>
+      </div>
+    </div>
+  </header>
+
+
+  <!-- Tabbed section -->
+  <div class="container">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">
+          <i class="bi bi-house-door"></i> {{ translate('home') }}
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">
+          <i class="bi bi-person"></i> {{ translate('sesiune') }}
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="dashboard-tab" data-bs-toggle="tab" data-bs-target="#dashboard-tab-pane" type="button" role="tab" aria-controls="dashboard-tab-pane" aria-selected="false">
+          <i class="bi bi-grid-3x3-gap"></i> {{ translate('instructaj') }}
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings-tab-pane" type="button" role="tab" aria-controls="settings-tab-pane" aria-selected="false">
+          <i class="bi bi-gear"></i> {{ translate('settings') }}
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">
+          <i class="bi bi-envelope"></i> {{ translate('contact') }}
+        </button>
+      </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+      <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+        <div class="p-4">
+          <h3>Welcome Home</h3>
+          <p>This is the home tab content.</p>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+        <div class="p-4">
+          <h3>{{ translate('initiaza_sesiune') }}</h3>
+          <form>
+            <!-- Optiuni semnare -->
+            <div class="mb-4">
+              <label class="form-label">{{ translate('optiuni_semnare') }}</label>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="signingOption" id="noElectronicSign" value="noElectronicSign" checked>
+                <label class="form-check-label" for="noElectronicSign">
+                  {{ translate('nu_semneaza') }}
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="signingOption" id="digitalSign" value="digitalSign">
+                <label class="form-check-label" for="digitalSign">
+                  {{ translate('semneaza_digital') }}
+                </label>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Instruire -->
+              <div class="col-md-4 mb-3">
+                <label for="instruire" class="form-label">{{ translate('instruire') }}</label>
+                <input type="text" class="form-control" id="instruire" placeholder="* Instruire" value="Demo - instruire birou">
+              </div>
+
+              <!-- Selecteaza angajati -->
+              <div class="col-md-4 mb-3">
+                <label for="tipInitiere" class="form-label">{{ translate('selecteaza_angajati') }}</label>
+                <select class="form-select" id="tipInitiere">
+                  <option selected>* {{ translate('tip_initiere') }}</option>
+                  <option value="selecteaza">{{ translate('selecteaza') }}</option>
+                </select>
+              </div>
+
+              <!-- Perioada de valabilitate a sesiunii -->
+              <div class="col-md-4 mb-3">
+                <label for="dataInceput" class="form-label">{{ translate('perioada_valabilitate') }}</label>
+                <input type="datetime-local" class="form-control" id="dataInceput" value="2025-12-02T13:43">
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Nume sesiune -->
+              <div class="col-md-4 mb-3">
+                <label for="numeSesiune" class="form-label">{{ translate('nume_sesiune') }}</label>
+                <input type="text" class="form-control" id="numeSesiune" placeholder="* Nume sesiune ro" value="Demo - instruire birou">
+                <input type="text" class="form-control mt-2" id="numeSesiuneEn" placeholder="* Nume sesiune en" value="Demo - Office training">
+              </div>
+
+              <!-- Filtreaza angajatii dupa data angajarii -->
+              <div class="col-md-4 mb-3">
+                <label class="form-label">{{ translate('filtreaza_angajati') }}</label>
+                <div class="mb-2">
+                  <label for="dataDe" class="form-label small">{{ translate('de_la') }}</label>
+                  <input type="date" class="form-control" id="dataDe" value="2025-12-04">
+                </div>
+                <div>
+                  <label for="dataPana" class="form-label small">{{ translate('pana_la') }}</label>
+                  <input type="date" class="form-control" id="dataPana" value="2025-12-10">
+                </div>
+              </div>
+
+              <!-- Termen limita -->
+              <div class="col-md-4 mb-3">
+                <label for="termenLimita" class="form-label">{{ translate('termen_limita') }}</label>
+                <input type="date" class="form-control" id="termenLimita">
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Selecteaza de aici angajatii -->
+              <div class="col-md-8 mb-3">
+                <label class="form-label">{{ translate('selecteaza_angajati') }}</label>
+                <div class="border rounded p-3">
+                  <button type="button" class="btn btn-link p-0 mb-2">0 {{ translate('filtrati') }}</button>
+                  <div class="mb-2">
+                    <label for="angajatiSelectati" class="form-label">* {{ translate('angajati_selectati') }}</label>
+                    <div class="border rounded p-2 bg-light">
+                      <span class="text-muted">0 {{ translate('selectati') }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Setari -->
+              <div class="col-md-4 mb-3">
+                <label class="form-label">{{ translate('setari') }}</label>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="sesiuneIntroductiva">
+                  <label class="form-check-label" for="sesiuneIntroductiva">
+                    {{ translate('sesiune_introductiva') }}
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-end">
+              <button type="submit" class="btn btn-primary btn-lg">{{ translate('initiaza_sesiune_btn') }}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="dashboard-tab-pane" role="tabpanel" aria-labelledby="dashboard-tab" tabindex="0">
+        <div class="p-4">
+          <!-- 3-column grid -->
+          <div class="row">
+            <div class="col-md-3">
+              <div class="card mb-3 h-100">
+                <div class="card-header bg-primary text-white">
+                  <h5 class="mb-0">{{ translate('filme_instructaj') }}</h5>
+                </div>
+                <div class="card-body">
+                  <div class="list-group list-group-flush">
+                    <a href="#" class="list-group-item list-group-item-action mb-2" (click)="selectVideo('workplace'); $event.preventDefault()">
+                      <i class="bi bi-play-circle me-2"></i>{{ translate('workplace_culture') }}
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action mb-2" (click)="selectVideo('fire'); $event.preventDefault()">
+                      <i class="bi bi-play-circle me-2"></i>{{ translate('teamwork') }}
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action mb-2" (click)="selectVideo('emergency'); $event.preventDefault()">
+                      <i class="bi bi-play-circle me-2"></i>{{ translate('communication') }}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card mb-3">
+                <div class="card-body">
+                  <h5 class="card-title">{{ translate('training_player') }}</h5>
+                  <div *ngIf="!selectedVideo" class="text-center text-muted p-4">
+                    <i class="bi bi-film" style="font-size: 3rem;"></i>
+                    <p class="mt-2">{{ translate('select_video') }}</p>
+                  </div>
+                  <div *ngIf="selectedVideo === 'workplace'">
+                    <div class="ratio ratio-16x9">
+                      <iframe id="workplace-iframe" src="https://www.youtube.com/embed/iCvmsMzlF7o?enablejsapi=1" title="Workplace Culture" allowfullscreen></iframe>
+                    </div>
+                    <p class="mt-2"><strong>{{ translate('workplace_culture') }}</strong></p>
+                  </div>
+                  <div *ngIf="selectedVideo === 'fire'">
+                    <div class="ratio ratio-16x9">
+                      <iframe id="fire-iframe" src="https://www.youtube.com/embed/8T_jwq9ph8k?enablejsapi=1" title="Teamwork" allowfullscreen></iframe>
+                    </div>
+                    <p class="mt-2"><strong>{{ translate('teamwork') }}</strong></p>
+                  </div>
+                  <div *ngIf="selectedVideo === 'emergency'">
+                    <div class="ratio ratio-16x9">
+                      <iframe id="emergency-iframe" src="https://www.youtube.com/embed/HAnw168huqA?enablejsapi=1" title="Communication" allowfullscreen></iframe>
+                    </div>
+                    <p class="mt-2"><strong>{{ translate('communication') }}</strong></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card mb-3 h-100">
+                <div class="card-header bg-primary text-white">
+                  <h5 class="mb-0">{{ translate('status') }}</h5>
+                </div>
+                <div class="card-body">
+                  <div class="mb-4">
+                    <p class="mb-2"><strong>{{ translate('workplace_culture') }}</strong></p>
+                    <div class="d-flex flex-wrap gap-2">
+                      <span class="badge" [ngClass]="videoStatus['workplace'] === 'not-started' ? 'bg-danger' : 'bg-light text-muted'" title="Not started">
+                        <i class="bi bi-circle"></i> {{ translate('not_started') }}
+                      </span>
+                      <span class="badge" [ngClass]="videoStatus['workplace'] === 'in-progress' ? 'bg-warning' : 'bg-light text-muted'" title="In progress">
+                        <i class="bi bi-hourglass-split"></i> {{ translate('in_progress') }}
+                      </span>
+                      <span class="badge" [ngClass]="videoStatus['workplace'] === 'finished' ? 'bg-success' : 'bg-light text-muted'" title="Finished">
+                        <i class="bi bi-check-circle"></i> {{ translate('finished') }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="mb-4">
+                    <p class="mb-2"><strong>{{ translate('teamwork') }}</strong></p>
+                    <div class="d-flex flex-wrap gap-2">
+                      <span class="badge" [ngClass]="videoStatus['fire'] === 'not-started' ? 'bg-danger' : 'bg-light text-muted'" title="Not started">
+                        <i class="bi bi-circle"></i> {{ translate('not_started') }}
+                      </span>
+                      <span class="badge" [ngClass]="videoStatus['fire'] === 'in-progress' ? 'bg-warning' : 'bg-light text-muted'" title="In progress">
+                        <i class="bi bi-hourglass-split"></i> {{ translate('in_progress') }}
+                      </span>
+                      <span class="badge" [ngClass]="videoStatus['fire'] === 'finished' ? 'bg-success' : 'bg-light text-muted'" title="Finished">
+                        <i class="bi bi-check-circle"></i> {{ translate('finished') }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="mb-4">
+                    <p class="mb-2"><strong>{{ translate('communication') }}</strong></p>
+                    <div class="d-flex flex-wrap gap-2">
+                      <span class="badge" [ngClass]="videoStatus['emergency'] === 'not-started' ? 'bg-danger' : 'bg-light text-muted'" title="Not started">
+                        <i class="bi bi-circle"></i> {{ translate('not_started') }}
+                      </span>
+                      <span class="badge" [ngClass]="videoStatus['emergency'] === 'in-progress' ? 'bg-warning' : 'bg-light text-muted'" title="In progress">
+                        <i class="bi bi-hourglass-split"></i> {{ translate('in_progress') }}
+                      </span>
+                      <span class="badge" [ngClass]="videoStatus['emergency'] === 'finished' ? 'bg-success' : 'bg-light text-muted'" title="Finished">
+                        <i class="bi bi-check-circle"></i> {{ translate('finished') }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="settings-tab-pane" role="tabpanel" aria-labelledby="settings-tab" tabindex="0">
+        <div class="p-4">
+          <h3>Settings</h3>
+          <p>This is the settings tab content.</p>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
+        <div class="p-4">
+          <h3>Contact</h3>
+          <p>This is the contact tab content.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
