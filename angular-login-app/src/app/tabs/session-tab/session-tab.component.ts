@@ -16,6 +16,10 @@ export class SessionTabComponent implements OnInit {
   showAddModal: boolean = false;
   availableTrainings: Training[] = [];
   selectedTrainingId: number | null = null;
+  
+  // Mock employees data - replace with actual data from service
+  allEmployees: any[] = [];
+  filteredEmployees: any[] = [];
 
   constructor(private fb: FormBuilder, private trainingService: TrainingService) {}
 
@@ -30,10 +34,9 @@ export class SessionTabComponent implements OnInit {
       instruire: ['', Validators.required],
       tipInitiere: ['', Validators.required],
       dataInceput: ['2025-12-02T13:43', Validators.required],
-      dataDe: ['2025-12-04', Validators.required],
-      dataPana: ['2025-12-10', Validators.required],
       termenLimita: ['', Validators.required],
-      sesiuneIntroductiva: [false]
+      angajatiSelectati: [[]], // Array of selected employee IDs
+      tipSesiune: [''] // 'angajare' or 'periodica'
     });
   }
 
@@ -46,13 +49,28 @@ export class SessionTabComponent implements OnInit {
   }
 
   onSubmit(): void {
+    console.log('=== Session Form Submission ===');
+    console.log('Form Valid:', this.sessionForm.valid);
+    console.log('All Form Values:', this.sessionForm.value);
+    console.log('Individual Values:');
+    console.log('  - Signing Option:', this.sessionForm.get('signingOption')?.value);
+    console.log('  - Training ID:', this.sessionForm.get('instruire')?.value);
+    console.log('  - Type Initiation:', this.sessionForm.get('tipInitiere')?.value);
+    console.log('  - Start Date:', this.sessionForm.get('dataInceput')?.value);
+    console.log('  - Deadline:', this.sessionForm.get('termenLimita')?.value);
+    console.log('  - Selected Employees:', this.sessionForm.get('angajatiSelectati')?.value);
+    console.log('  - Session Type:', this.sessionForm.get('tipSesiune')?.value);
+    
     if (this.sessionForm.valid) {
-      console.log('Form Values:', this.sessionForm.value);
-      const formData = this.getAllFormValues();
-      console.log('Training ID:', formData.instruire);
-      console.log('Signing option:', formData.signingOption);
+      console.log('✓ Form is valid - ready to submit');
     } else {
-      console.log('Form is invalid');
+      console.log('✗ Form is invalid - please fill required fields');
+      Object.keys(this.sessionForm.controls).forEach(key => {
+        const control = this.sessionForm.get(key);
+        if (control?.invalid) {
+          console.log(`  - ${key}: invalid`);
+        }
+      });
     }
   }
 
@@ -85,5 +103,19 @@ export class SessionTabComponent implements OnInit {
         this.sessionForm.patchValue({ instruire: '' });
       }
     }
+  }
+
+  get selectedEmployeesCount(): number {
+    return this.sessionForm.get('angajatiSelectati')?.value?.length || 0;
+  }
+
+  get filteredEmployeesCount(): number {
+    return this.filteredEmployees.length;
+  }
+
+  saveCOR(): void {
+    const corValue = this.sessionForm.get('tipInitiere')?.value;
+    console.log('Saving COR:', corValue);
+    // Add your save logic here
   }
 }
