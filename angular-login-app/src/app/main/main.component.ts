@@ -2,31 +2,21 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { CommonModule } from '@angular/common';
-
-declare global {
-  interface Window {
-    onYouTubeIframeAPIReady: () => void;
-    YT: any;
-  }
-}
+import { HomeTabComponent } from '../tabs/home-tab/home-tab.component';
+import { SessionTabComponent } from '../tabs/session-tab/session-tab.component';
+import { TrainingTabComponent } from '../tabs/training-tab/training-tab.component';
+import { EmployeesTabComponent } from '../tabs/employees-tab/employees-tab.component';
+import { ContactTabComponent } from '../tabs/contact-tab/contact-tab.component';
 
 @Component({
   selector: 'app-main',
-  imports: [CommonModule],
+  imports: [CommonModule, HomeTabComponent, SessionTabComponent, TrainingTabComponent, EmployeesTabComponent, ContactTabComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
 })
 export class MainComponent implements OnInit {
   username: string = '';
-  selectedVideo: string | null = null;
   currentLanguage: string = 'en';
-  videoStatus: { [key: string]: string } = {
-    'workplace': 'not-started',
-    'fire': 'not-started',
-    'emergency': 'not-started'
-  };
-  private players: { [key: string]: any } = {};
-  private apiLoaded = false;
 
   translations: { [key: string]: { [key: string]: string } } = {
     en: {
@@ -34,6 +24,7 @@ export class MainComponent implements OnInit {
       'sesiune': 'Session',
       'instructaj': 'Training',
       'settings': 'Settings',
+      'employees': 'Employees',
       'contact': 'Contact',
       'profile': 'Profile',
       'logout': 'Logout',
@@ -73,6 +64,7 @@ export class MainComponent implements OnInit {
       'sesiune': 'Sesiune',
       'instructaj': 'Instructaj',
       'settings': 'Setări',
+      'employees': 'Angajati',
       'contact': 'Contact',
       'profile': 'Profil',
       'logout': 'Deconectare',
@@ -119,61 +111,6 @@ export class MainComponent implements OnInit {
     }
     // Set default language to English
     this.currentLanguage = 'en';
-    this.loadYouTubeAPI();
-  }
-
-  loadYouTubeAPI(): void {
-    if (!this.apiLoaded) {
-      const tag = document.createElement('script');
-      tag.src = 'https://www.youtube.com/iframe_api';
-      const firstScriptTag = document.getElementsByTagName('script')[0];
-      firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
-      this.apiLoaded = true;
-
-      window.onYouTubeIframeAPIReady = () => {
-        this.initializePlayers();
-      };
-    }
-  }
-
-  initializePlayers(): void {
-    const videoIds: { [key: string]: string } = {
-      'workplace': 'workplace-iframe',
-      'fire': 'fire-iframe',
-      'emergency': 'emergency-iframe'
-    };
-
-    Object.keys(videoIds).forEach(key => {
-      setTimeout(() => {
-        const iframe = document.getElementById(videoIds[key]);
-        if (iframe && window.YT && window.YT.Player) {
-          this.players[key] = new window.YT.Player(videoIds[key], {
-            events: {
-              'onStateChange': (event: any) => this.onPlayerStateChange(event, key)
-            }
-          });
-        }
-      }, 1000);
-    });
-  }
-
-  onPlayerStateChange(event: any, videoId: string): void {
-    // YT.PlayerState.ENDED = 0
-    if (event.data === 0) {
-      this.videoStatus[videoId] = 'finished';
-    }
-  }
-
-  selectVideo(videoId: string): void {
-    this.selectedVideo = videoId;
-    if (this.videoStatus[videoId] === 'not-started') {
-      this.videoStatus[videoId] = 'in-progress';
-    }
-    
-    // Reinitialize player after view renders
-    setTimeout(() => {
-      this.initializePlayers();
-    }, 500);
   }
 
   changeLanguage(lang: string): void {

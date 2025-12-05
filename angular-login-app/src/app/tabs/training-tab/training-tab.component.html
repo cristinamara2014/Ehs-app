@@ -1,0 +1,105 @@
+<div class="p-4">
+  <!-- 3-column grid -->
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card mb-3 h-100">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Filme instructaj</h5>
+        </div>
+        <div class="card-body">
+          <div class="list-group list-group-flush">
+            <a href="#" class="list-group-item list-group-item-action mb-2" (click)="selectVideo('workplace'); $event.preventDefault()">
+              <i class="bi bi-play-circle me-2"></i>Workplace Culture & Environment
+            </a>
+            <a href="#" class="list-group-item list-group-item-action mb-2" (click)="selectVideo('fire'); $event.preventDefault()">
+              <i class="bi bi-play-circle me-2"></i>Teamwork & Collaboration
+            </a>
+            <a href="#" class="list-group-item list-group-item-action mb-2" (click)="selectVideo('emergency'); $event.preventDefault()">
+              <i class="bi bi-play-circle me-2"></i>Professional Communication
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Training Player</h5>
+          <div *ngIf="!selectedVideo" class="text-center text-muted p-4">
+            <i class="bi bi-film" style="font-size: 3rem;"></i>
+            <p class="mt-2">Select a video to watch</p>
+          </div>
+          <div *ngIf="selectedVideo === 'workplace'">
+            <div class="ratio ratio-16x9">
+              <iframe id="workplace-iframe" src="https://www.youtube.com/embed/iCvmsMzlF7o?enablejsapi=1" title="Workplace Culture" allowfullscreen></iframe>
+            </div>
+            <p class="mt-2"><strong>Workplace Culture & Environment</strong></p>
+          </div>
+          <div *ngIf="selectedVideo === 'fire'">
+            <div class="ratio ratio-16x9">
+              <iframe id="fire-iframe" src="https://www.youtube.com/embed/8T_jwq9ph8k?enablejsapi=1" title="Teamwork" allowfullscreen></iframe>
+            </div>
+            <p class="mt-2"><strong>Teamwork & Collaboration</strong></p>
+          </div>
+          <div *ngIf="selectedVideo === 'emergency'">
+            <div class="ratio ratio-16x9">
+              <iframe id="emergency-iframe" src="https://www.youtube.com/embed/HAnw168huqA?enablejsapi=1" title="Communication" allowfullscreen></iframe>
+            </div>
+            <p class="mt-2"><strong>Professional Communication</strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card mb-3 h-100">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Status</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-4">
+            <p class="mb-2"><strong>Workplace Culture & Environment</strong></p>
+            <div class="d-flex flex-wrap gap-2">
+              <span class="badge" [ngClass]="videoStatus['workplace'] === 'not-started' ? 'bg-danger' : 'bg-light text-muted'" title="Not started">
+                <i class="bi bi-circle"></i> Not started
+              </span>
+              <span class="badge" [ngClass]="videoStatus['workplace'] === 'in-progress' ? 'bg-warning' : 'bg-light text-muted'" title="In progress">
+                <i class="bi bi-hourglass-split"></i> In progress
+              </span>
+              <span class="badge" [ngClass]="videoStatus['workplace'] === 'finished' ? 'bg-success' : 'bg-light text-muted'" title="Finished">
+                <i class="bi bi-check-circle"></i> Finished
+              </span>
+            </div>
+          </div>
+          <div class="mb-4">
+            <p class="mb-2"><strong>Teamwork & Collaboration</strong></p>
+            <div class="d-flex flex-wrap gap-2">
+              <span class="badge" [ngClass]="videoStatus['fire'] === 'not-started' ? 'bg-danger' : 'bg-light text-muted'" title="Not started">
+                <i class="bi bi-circle"></i> Not started
+              </span>
+              <span class="badge" [ngClass]="videoStatus['fire'] === 'in-progress' ? 'bg-warning' : 'bg-light text-muted'" title="In progress">
+                <i class="bi bi-hourglass-split"></i> In progress
+              </span>
+              <span class="badge" [ngClass]="videoStatus['fire'] === 'finished' ? 'bg-success' : 'bg-light text-muted'" title="Finished">
+                <i class="bi bi-check-circle"></i> Finished
+              </span>
+            </div>
+          </div>
+          <div class="mb-4">
+            <p class="mb-2"><strong>Professional Communication</strong></p>
+            <div class="d-flex flex-wrap gap-2">
+              <span class="badge" [ngClass]="videoStatus['emergency'] === 'not-started' ? 'bg-danger' : 'bg-light text-muted'" title="Not started">
+                <i class="bi bi-circle"></i> Not started
+              </span>
+              <span class="badge" [ngClass]="videoStatus['emergency'] === 'in-progress' ? 'bg-warning' : 'bg-light text-muted'" title="In progress">
+                <i class="bi bi-hourglass-split"></i> In progress
+              </span>
+              <span class="badge" [ngClass]="videoStatus['emergency'] === 'finished' ? 'bg-success' : 'bg-light text-muted'" title="Finished">
+                <i class="bi bi-check-circle"></i> Finished
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
