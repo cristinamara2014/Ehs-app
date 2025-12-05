@@ -1,0 +1,125 @@
+<div class="p-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0">Instruiri</h4>
+    <div class="input-group" style="width: 300px;">
+      <input 
+        type="text" 
+        class="form-control" 
+        placeholder="Cauta" 
+        [(ngModel)]="searchText"
+        (input)="onSearch()">
+      <span class="input-group-text">
+        <i class="bi bi-search"></i>
+      </span>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <nav aria-label="Page navigation">
+      <ul class="pagination pagination-sm mb-0">
+        <li class="page-item active">
+          <a class="page-link" href="#">1</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-light">
+        <tr>
+          <th style="width: 80px;">
+            ID
+            <i class="bi bi-caret-down-fill ms-1" style="font-size: 0.7rem;"></i>
+          </th>
+          <th>Nume</th>
+          <th>
+            Tip
+            <i class="bi bi-caret-down-fill ms-1" style="font-size: 0.7rem;"></i>
+          </th>
+          <th style="width: 100px;">Limbi</th>
+          <th style="width: 100px;" class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let training of filteredTrainings">
+          <td>{{ training.id }}</td>
+          <td>
+            <a href="#" class="text-primary text-decoration-none" (click)="viewTraining(training.id); $event.preventDefault()">
+              {{ training.name }}
+            </a>
+          </td>
+          <td>{{ training.type }}</td>
+          <td>{{ training.language }}</td>
+          <td class="text-end">
+            <button 
+              class="btn btn-sm btn-outline-primary me-1" 
+              title="View"
+              (click)="viewTraining(training.id)">
+              <i class="bi bi-eye"></i>
+            </button>
+            <button 
+              class="btn btn-sm btn-outline-info" 
+              title="Edit"
+              (click)="editTraining(training.id)">
+              <i class="bi bi-info-circle"></i>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredTrainings.length === 0">
+          <td colspan="5" class="text-center text-muted py-4">
+            No trainings found
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-3">
+    <nav aria-label="Page navigation">
+      <ul class="pagination pagination-sm mb-0">
+        <li class="page-item active">
+          <a class="page-link" href="#">1</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<!-- Modal Dialog -->
+<div class="modal fade" [class.show]="selectedTraining" [style.display]="selectedTraining ? 'block' : 'none'" tabindex="-1" *ngIf="selectedTraining">
+  <div class="modal-backdrop fade" [class.show]="selectedTraining" (click)="closeModal()"></div>
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h5 class="modal-title">Instruire</h5>
+        <button type="button" class="btn-close" (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-4">
+            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=300&fit=crop" 
+                 alt="Training" 
+                 class="img-fluid rounded">
+          </div>
+          <div class="col-md-8">
+            <h4 class="mb-4">{{ selectedTraining.name }}</h4>
+            <div class="d-flex gap-2">
+              <button class="btn btn-danger px-4" (click)="startTraining()">
+                Vezi instruire
+              </button>
+              <button class="btn btn-primary px-4" (click)="startTest()">
+                Vezi intrebari test
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer border-0">
+        <a href="#" class="text-primary text-decoration-none" (click)="closeModal(); $event.preventDefault()">
+          <i class="bi bi-arrow-left me-2"></i>Inapoi la instruiri
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

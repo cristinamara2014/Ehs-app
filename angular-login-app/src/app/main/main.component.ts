@@ -7,10 +7,11 @@ import { SessionTabComponent } from '../tabs/session-tab/session-tab.component';
 import { TrainingTabComponent } from '../tabs/training-tab/training-tab.component';
 import { EmployeesTabComponent } from '../tabs/employees-tab/employees-tab.component';
 import { ContactTabComponent } from '../tabs/contact-tab/contact-tab.component';
+import { TrainingsTabComponent } from '../tabs/trainings-tab/trainings-tab.component';
 
 @Component({
   selector: 'app-main',
-  imports: [CommonModule, HomeTabComponent, SessionTabComponent, TrainingTabComponent, EmployeesTabComponent, ContactTabComponent],
+  imports: [CommonModule, HomeTabComponent, SessionTabComponent, TrainingTabComponent, EmployeesTabComponent, ContactTabComponent, TrainingsTabComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
 })
@@ -26,6 +27,7 @@ export class MainComponent implements OnInit {
       'settings': 'Settings',
       'employees': 'Employees',
       'contact': 'Contact',
+      'trainings': 'Trainings',
       'profile': 'Profile',
       'logout': 'Logout',
       'filme_instructaj': 'Training Videos',
@@ -66,6 +68,7 @@ export class MainComponent implements OnInit {
       'settings': 'Setări',
       'employees': 'Angajati',
       'contact': 'Contact',
+      'trainings': 'Cursuri',
       'profile': 'Profil',
       'logout': 'Deconectare',
       'filme_instructaj': 'Filme instructaj',
