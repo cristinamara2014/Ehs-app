@@ -88,11 +88,6 @@
         </button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="dashboard-tab" data-bs-toggle="tab" data-bs-target="#dashboard-tab-pane" type="button" role="tab" aria-controls="dashboard-tab-pane" aria-selected="false">
-          <i class="bi bi-grid-3x3-gap"></i> {{ translate('instructaj') }}
-        </button>
-      </li>
-      <li class="nav-item" role="presentation">
         <button class="nav-link" id="trainings-tab" data-bs-toggle="tab" data-bs-target="#trainings-tab-pane" type="button" role="tab" aria-controls="trainings-tab-pane" aria-selected="false">
           <i class="bi bi-book"></i> {{ translate('trainings') }}
         </button>
@@ -114,9 +109,6 @@
       </div>
       <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
         <app-session-tab></app-session-tab>
-      </div>
-      <div class="tab-pane fade" id="dashboard-tab-pane" role="tabpanel" aria-labelledby="dashboard-tab" tabindex="0">
-        <app-training-tab></app-training-tab>
       </div>
       <div class="tab-pane fade" id="trainings-tab-pane" role="tabpanel" aria-labelledby="trainings-tab" tabindex="0">
         <app-trainings-tab></app-trainings-tab>

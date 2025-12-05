@@ -21,8 +21,20 @@
     <div class="row">
       <!-- Instruire -->
       <div class="col-md-4 mb-3">
-        <label for="instruire" class="form-label">Instruire</label>
-        <input type="text" class="form-control" id="instruire" placeholder="* Instruire" formControlName="instruire">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <label for="instruire" class="form-label mb-0">Instruire</label>
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-sm btn-success" (click)="openAddModal()">
+              <i class="bi bi-plus-circle me-1"></i>Add
+            </button>
+            <button type="button" class="btn btn-sm btn-danger" (click)="removeSelectedTraining()" [disabled]="!sessionForm.get('instruire')?.value">
+              <i class="bi bi-trash me-1"></i>Remove
+            </button>
+          </div>
+        </div>
+        <select class="form-select training-listbox" id="instruire" formControlName="instruire" [attr.size]="trainings.length > 5 ? 5 : trainings.length">
+          <option *ngFor="let training of trainings" [value]="training.id">{{ training.name }}</option>
+        </select>
       </div>
 
       <!-- Selecteaza angajati -->
@@ -42,13 +54,6 @@
     </div>
 
     <div class="row">
-      <!-- Nume sesiune -->
-      <div class="col-md-4 mb-3">
-        <label for="numeSesiune" class="form-label">Nume sesiune</label>
-        <input type="text" class="form-control" id="numeSesiune" placeholder="* Nume sesiune ro" formControlName="numeSesiune">
-        <input type="text" class="form-control mt-2" id="numeSesiuneEn" placeholder="* Nume sesiune en" formControlName="numeSesiuneEn">
-      </div>
-
       <!-- Filtreaza angajatii dupa data angajarii -->
       <div class="col-md-4 mb-3">
         <label class="form-label">Filtreaza angajatii dupa data angajarii</label>
@@ -100,4 +105,52 @@
       <button type="submit" class="btn btn-primary btn-lg" (click)="onSubmit()">Initiaza sesiune</button>
     </div>
   </form>
+</div>
+
+<!-- Add Training Modal -->
+<div class="modal fade" [class.show]="showAddModal" [style.display]="showAddModal ? 'block' : 'none'" tabindex="-1" *ngIf="showAddModal">
+  <div class="modal-backdrop fade" [class.show]="showAddModal" (click)="closeAddModal()"></div>
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Select Training</h5>
+        <button type="button" class="btn-close" (click)="closeAddModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th style="width: 80px;">ID</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th style="width: 100px;">Language</th>
+                <th style="width: 100px;" class="text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let training of availableTrainings" 
+                  [class.table-active]="selectedTrainingId === training.id"
+                  (click)="selectTraining(training.id)"
+                  style="cursor: pointer;">
+                <td>{{ training.id }}</td>
+                <td>{{ training.name }}</td>
+                <td>{{ training.type }}</td>
+                <td>{{ training.language }}</td>
+                <td class="text-center">
+                  <i class="bi bi-check-circle-fill text-success" *ngIf="selectedTrainingId === training.id"></i>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeAddModal()">Cancel</button>
+        <button type="button" class="btn btn-success" (click)="addSelectedTraining()" [disabled]="selectedTrainingId === null">
+          <i class="bi bi-plus-circle me-1"></i>Add Selected
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

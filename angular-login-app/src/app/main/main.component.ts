@@ -4,14 +4,13 @@ import { AuthService } from '../auth.service';
 import { CommonModule } from '@angular/common';
 import { HomeTabComponent } from '../tabs/home-tab/home-tab.component';
 import { SessionTabComponent } from '../tabs/session-tab/session-tab.component';
-import { TrainingTabComponent } from '../tabs/training-tab/training-tab.component';
 import { EmployeesTabComponent } from '../tabs/employees-tab/employees-tab.component';
 import { ContactTabComponent } from '../tabs/contact-tab/contact-tab.component';
 import { TrainingsTabComponent } from '../tabs/trainings-tab/trainings-tab.component';
 
 @Component({
   selector: 'app-main',
-  imports: [CommonModule, HomeTabComponent, SessionTabComponent, TrainingTabComponent, EmployeesTabComponent, ContactTabComponent, TrainingsTabComponent],
+  imports: [CommonModule, HomeTabComponent, SessionTabComponent, EmployeesTabComponent, ContactTabComponent, TrainingsTabComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
 })

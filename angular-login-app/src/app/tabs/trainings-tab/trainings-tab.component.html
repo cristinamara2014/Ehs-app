@@ -17,8 +17,14 @@
   <div class="mb-3">
     <nav aria-label="Page navigation">
       <ul class="pagination pagination-sm mb-0">
-        <li class="page-item active">
-          <a class="page-link" href="#">1</a>
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <a class="page-link" href="#" (click)="previousPage(); $event.preventDefault()">&laquo;</a>
+        </li>
+        <li class="page-item" *ngFor="let page of pageNumbers" [class.active]="page === currentPage">
+          <a class="page-link" href="#" (click)="goToPage(page); $event.preventDefault()">{{ page }}</a>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <a class="page-link" href="#" (click)="nextPage(); $event.preventDefault()">&raquo;</a>
         </li>
       </ul>
     </nav>
@@ -42,8 +48,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let training of filteredTrainings">
-          <td>{{ training.id }}</td>
+        <tr *ngFor="let training of paginatedTrainings; let i = index">
+          <td>{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td>
           <td>
             <a href="#" class="text-primary text-decoration-none" (click)="viewTraining(training.id); $event.preventDefault()">
               {{ training.name }}
@@ -66,7 +72,7 @@
             </button>
           </td>
         </tr>
-        <tr *ngIf="filteredTrainings.length === 0">
+        <tr *ngIf="paginatedTrainings.length === 0">
           <td colspan="5" class="text-center text-muted py-4">
             No trainings found
           </td>
@@ -78,15 +84,21 @@
   <div class="mt-3">
     <nav aria-label="Page navigation">
       <ul class="pagination pagination-sm mb-0">
-        <li class="page-item active">
-          <a class="page-link" href="#">1</a>
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <a class="page-link" href="#" (click)="previousPage(); $event.preventDefault()">&laquo;</a>
+        </li>
+        <li class="page-item" *ngFor="let page of pageNumbers" [class.active]="page === currentPage">
+          <a class="page-link" href="#" (click)="goToPage(page); $event.preventDefault()">{{ page }}</a>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <a class="page-link" href="#" (click)="nextPage(); $event.preventDefault()">&raquo;</a>
         </li>
       </ul>
     </nav>
   </div>
 </div>
 
-<!-- Modal Dialog -->
+<!-- Training Details Modal -->
 <div class="modal fade" [class.show]="selectedTraining" [style.display]="selectedTraining ? 'block' : 'none'" tabindex="-1" *ngIf="selectedTraining">
   <div class="modal-backdrop fade" [class.show]="selectedTraining" (click)="closeModal()"></div>
   <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -119,6 +131,123 @@
         <a href="#" class="text-primary text-decoration-none" (click)="closeModal(); $event.preventDefault()">
           <i class="bi bi-arrow-left me-2"></i>Inapoi la instruiri
         </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Training Player Modal -->
+<div class="modal fade" [class.show]="showTrainingModal" [style.display]="showTrainingModal ? 'block' : 'none'" tabindex="-1" *ngIf="showTrainingModal">
+  <div class="modal-backdrop fade" [class.show]="showTrainingModal" (click)="closeTrainingModal()"></div>
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h5 class="modal-title">Training Player</h5>
+        <button type="button" class="btn-close" (click)="closeTrainingModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="card mb-3 h-100">
+              <div class="card-header bg-primary text-white">
+                <h6 class="mb-0">Filme instructaj</h6>
+              </div>
+              <div class="card-body">
+                <div class="list-group list-group-flush">
+                  <a href="#" class="list-group-item list-group-item-action mb-2" (click)="selectTrainingVideo('workplace'); $event.preventDefault()">
+                    <i class="bi bi-play-circle me-2"></i>Workplace Culture & Environment
+                  </a>
+                  <a href="#" class="list-group-item list-group-item-action mb-2" (click)="selectTrainingVideo('fire'); $event.preventDefault()">
+                    <i class="bi bi-play-circle me-2"></i>Teamwork & Collaboration
+                  </a>
+                  <a href="#" class="list-group-item list-group-item-action mb-2" (click)="selectTrainingVideo('emergency'); $event.preventDefault()">
+                    <i class="bi bi-play-circle me-2"></i>Professional Communication
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card mb-3">
+              <div class="card-body">
+                <h5 class="card-title">Training Player</h5>
+                <div *ngIf="!selectedTrainingVideo" class="text-center text-muted p-4">
+                  <i class="bi bi-film" style="font-size: 3rem;"></i>
+                  <p class="mt-2">Select a video to watch</p>
+                </div>
+                <div *ngIf="selectedTrainingVideo === 'workplace'">
+                  <div class="ratio ratio-16x9">
+                    <iframe id="training-workplace-iframe" src="https://www.youtube.com/embed/iCvmsMzlF7o?enablejsapi=1" title="Workplace Culture" allowfullscreen></iframe>
+                  </div>
+                  <p class="mt-2"><strong>Workplace Culture & Environment</strong></p>
+                </div>
+                <div *ngIf="selectedTrainingVideo === 'fire'">
+                  <div class="ratio ratio-16x9">
+                    <iframe id="training-fire-iframe" src="https://www.youtube.com/embed/8T_jwq9ph8k?enablejsapi=1" title="Teamwork" allowfullscreen></iframe>
+                  </div>
+                  <p class="mt-2"><strong>Teamwork & Collaboration</strong></p>
+                </div>
+                <div *ngIf="selectedTrainingVideo === 'emergency'">
+                  <div class="ratio ratio-16x9">
+                    <iframe id="training-emergency-iframe" src="https://www.youtube.com/embed/HAnw168huqA?enablejsapi=1" title="Communication" allowfullscreen></iframe>
+                  </div>
+                  <p class="mt-2"><strong>Professional Communication</strong></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card mb-3 h-100">
+              <div class="card-header bg-primary text-white">
+                <h6 class="mb-0">Status</h6>
+              </div>
+              <div class="card-body">
+                <div class="mb-4">
+                  <p class="mb-2 small"><strong>Workplace Culture</strong></p>
+                  <div class="d-flex flex-wrap gap-1">
+                    <span class="badge badge-sm" [ngClass]="trainingVideoStatus['workplace'] === 'not-started' ? 'bg-danger' : 'bg-light text-muted'" title="Not started">
+                      <i class="bi bi-circle"></i> Not started
+                    </span>
+                    <span class="badge badge-sm" [ngClass]="trainingVideoStatus['workplace'] === 'in-progress' ? 'bg-warning' : 'bg-light text-muted'" title="In progress">
+                      <i class="bi bi-hourglass-split"></i> In progress
+                    </span>
+                    <span class="badge badge-sm" [ngClass]="trainingVideoStatus['workplace'] === 'finished' ? 'bg-success' : 'bg-light text-muted'" title="Finished">
+                      <i class="bi bi-check-circle"></i> Finished
+                    </span>
+                  </div>
+                </div>
+                <div class="mb-4">
+                  <p class="mb-2 small"><strong>Teamwork</strong></p>
+                  <div class="d-flex flex-wrap gap-1">
+                    <span class="badge badge-sm" [ngClass]="trainingVideoStatus['fire'] === 'not-started' ? 'bg-danger' : 'bg-light text-muted'" title="Not started">
+                      <i class="bi bi-circle"></i> Not started
+                    </span>
+                    <span class="badge badge-sm" [ngClass]="trainingVideoStatus['fire'] === 'in-progress' ? 'bg-warning' : 'bg-light text-muted'" title="In progress">
+                      <i class="bi bi-hourglass-split"></i> In progress
+                    </span>
+                    <span class="badge badge-sm" [ngClass]="trainingVideoStatus['fire'] === 'finished' ? 'bg-success' : 'bg-light text-muted'" title="Finished">
+                      <i class="bi bi-check-circle"></i> Finished
+                    </span>
+                  </div>
+                </div>
+                <div class="mb-4">
+                  <p class="mb-2 small"><strong>Communication</strong></p>
+                  <div class="d-flex flex-wrap gap-1">
+                    <span class="badge badge-sm" [ngClass]="trainingVideoStatus['emergency'] === 'not-started' ? 'bg-danger' : 'bg-light text-muted'" title="Not started">
+                      <i class="bi bi-circle"></i> Not started
+                    </span>
+                    <span class="badge badge-sm" [ngClass]="trainingVideoStatus['emergency'] === 'in-progress' ? 'bg-warning' : 'bg-light text-muted'" title="In progress">
+                      <i class="bi bi-hourglass-split"></i> In progress
+                    </span>
+                    <span class="badge badge-sm" [ngClass]="trainingVideoStatus['emergency'] === 'finished' ? 'bg-success' : 'bg-light text-muted'" title="Finished">
+                      <i class="bi bi-check-circle"></i> Finished
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
