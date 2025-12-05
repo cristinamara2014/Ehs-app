@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { TrainingService, Training } from '../../services/training.service';
+import { MainComponent } from '../../main/main.component';
 
 @Component({
   selector: 'app-session-tab',
@@ -21,7 +22,11 @@ export class SessionTabComponent implements OnInit {
   allEmployees: any[] = [];
   filteredEmployees: any[] = [];
 
-  constructor(private fb: FormBuilder, private trainingService: TrainingService) {}
+  constructor(
+    private fb: FormBuilder, 
+    private trainingService: TrainingService,
+    public mainComponent: MainComponent
+  ) {}
 
   ngOnInit(): void {
     this.trainings = this.trainingService.getTrainings();
@@ -30,7 +35,7 @@ export class SessionTabComponent implements OnInit {
 
   initializeForm(): void {
     this.sessionForm = this.fb.group({
-      signingOption: ['noElectronicSign'],
+      signingOption: ['digitalSign'],
       instruire: ['', Validators.required],
       tipInitiere: ['', Validators.required],
       dataInceput: ['2025-12-02T13:43', Validators.required],

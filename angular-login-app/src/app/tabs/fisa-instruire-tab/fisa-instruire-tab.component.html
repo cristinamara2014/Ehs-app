@@ -1,0 +1,111 @@
+<div class="p-4">
+  <div class="mb-4 pb-3 border-bottom">
+    <h2 class="text-primary fw-bold">
+      <i class="bi bi-file-earmark-text me-2"></i>{{ mainComponent.translate('fise_instruire') }}
+    </h2>
+  </div>
+
+  <!-- Search and Filters Row -->
+  <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
+  <div class="row mb-4">
+    <!-- Search Box -->
+    <div class="col-md-3">
+      <div class="input-group">
+        <span class="input-group-text bg-white">
+          <i class="bi bi-search"></i>
+        </span>
+        <input type="text" class="form-control" [placeholder]="mainComponent.translate('cauta')" formControlName="searchText">
+      </div>
+    </div>
+
+    <!-- Status Filter -->
+    <div class="col-md-3">
+      <select class="form-select" formControlName="statusFilter">
+        <option value="">{{ mainComponent.translate('status_fise') }}</option>
+        <option value="toate">{{ mainComponent.translate('toate') }}</option>
+        <option value="finalizat">{{ mainComponent.translate('finalizat') }}</option>
+        <option value="nefinalizat">{{ mainComponent.translate('nefinalizat') }}</option>
+      </select>
+    </div>
+
+    <!-- Date From -->
+    <div class="col-md-3">
+      <input type="date" class="form-control" [placeholder]="mainComponent.translate('de_la')" formControlName="dateFrom">
+    </div>
+
+    <!-- Date To -->
+    <div class="col-md-3">
+      <input type="date" class="form-control" [placeholder]="mainComponent.translate('pana_la')" formControlName="dateTo">
+    </div>
+  </div>
+
+  <!-- Radio Buttons Row -->
+  <div class="row mb-4">
+    <div class="col-md-12">
+      <div class="d-flex gap-4">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="searchType" id="searchByEmployee" value="employee" formControlName="searchType">
+          <label class="form-check-label" for="searchByEmployee">
+            {{ mainComponent.translate('cauta_dupa_angajat') }}
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="searchType" id="searchBySession" value="session" formControlName="searchType">
+          <label class="form-check-label" for="searchBySession">
+            {{ mainComponent.translate('cauta_dupa_sesiune') }}
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  </form>
+
+  <!-- Pagination -->
+  <div class="mb-3">
+    <nav aria-label="Page navigation">
+      <ul class="pagination pagination-sm mb-0">
+        <li class="page-item active">
+          <a class="page-link" href="#">1</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Table -->
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>{{ mainComponent.translate('nume_angajat') }}</th>
+          <th>{{ mainComponent.translate('email') }}</th>
+          <th>{{ mainComponent.translate('nume_sesiune') }}</th>
+          <th>{{ mainComponent.translate('data_finalizare_instruire') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="trainingSheetsData.length === 0">
+          <td colspan="4" class="text-center text-primary py-4">
+            {{ mainComponent.translate('nu_exista_date') }}
+          </td>
+        </tr>
+        <tr *ngFor="let sheet of trainingSheetsData">
+          <td>{{ sheet.employeeName }}</td>
+          <td>{{ sheet.email }}</td>
+          <td>{{ sheet.sessionName }}</td>
+          <td>{{ sheet.completionDate }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Bottom Pagination -->
+  <div class="mt-3">
+    <nav aria-label="Page navigation">
+      <ul class="pagination pagination-sm mb-0">
+        <li class="page-item active">
+          <a class="page-link" href="#">1</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
