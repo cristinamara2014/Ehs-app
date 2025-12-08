@@ -110,3 +110,55 @@
   position: relative;
   z-index: 1050;
 }
+
+/* Dual Select Styles for COR Modal */
+.dual-select-list {
+  max-height: 400px;
+  overflow-y: auto;
+  background-color: #f8f9fa;
+}
+
+.dual-select-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid #dee2e6;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  background-color: white;
+}
+
+.dual-select-item:hover {
+  background-color: #e9ecef;
+}
+
+.dual-select-item.selected {
+  background-color: #cfe2ff;
+  border-left: 4px solid #0d6efd;
+}
+
+.dual-select-item:last-child {
+  border-bottom: none;
+}
+
+.dual-select-item label {
+  cursor: pointer;
+  user-select: none;
+  padding: 0;
+}
+
+/* Custom scrollbar for dual select */
+.dual-select-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dual-select-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.dual-select-list::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.dual-select-list::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

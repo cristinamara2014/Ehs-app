@@ -1,4 +1,71 @@
 <div class="p-4">
-  <h3>Welcome Home</h3>
-  <p>This is the home tab content.</p>
+  <div class="mb-4 pb-3 border-bottom">
+    <h2 class="text-primary fw-bold">
+      <i class="bi bi-house-door me-2"></i>Dashboard
+    </h2>
+  </div>
+
+  <div class="row">
+    <!-- Bar Chart -->
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <canvas id="barChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Line Chart -->
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <canvas id="lineChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="row mt-4">
+    <div class="col-md-3 mb-3">
+      <div class="card text-white bg-primary shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">
+            <i class="bi bi-people-fill me-2"></i>Total Employees
+          </h5>
+          <p class="card-text display-6">156</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card text-white bg-success shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">
+            <i class="bi bi-check-circle-fill me-2"></i>Completed Sessions
+          </h5>
+          <p class="card-text display-6">94</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card text-white bg-warning shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">
+            <i class="bi bi-clock-fill me-2"></i>Pending Sessions
+          </h5>
+          <p class="card-text display-6">23</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card text-white bg-info shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">
+            <i class="bi bi-award-fill me-2"></i>Certifications
+          </h5>
+          <p class="card-text display-6">307</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

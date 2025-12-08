@@ -43,10 +43,9 @@
             <i class="bi bi-save me-1"></i>{{ mainComponent.translate('save') }}
           </button>
         </div>
-        <select class="form-select" id="tipInitiere" formControlName="tipInitiere">
-          <option selected>{{ mainComponent.translate('selecteaza') }}</option>
-          <option value="selecteaza">{{ mainComponent.translate('selecteaza') }}</option>
-        </select>
+        <button type="button" class="btn btn-outline-primary w-100" (click)="openCorModal()">
+          <i class="bi bi-gear-fill me-2"></i>Manage COR Codes
+        </button>
       </div>
 
       <!-- Perioada de valabilitate a sesiunii & Termen limita -->
@@ -142,6 +141,170 @@
         <button type="button" class="btn btn-secondary" (click)="closeAddModal()">Cancel</button>
         <button type="button" class="btn btn-success" (click)="addSelectedTraining()" [disabled]="selectedTrainingId === null">
           <i class="bi bi-plus-circle me-1"></i>Add Selected
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COR Codes Management Modal -->
+<div class="modal fade" [class.show]="showCorModal" [style.display]="showCorModal ? 'block' : 'none'" tabindex="-1" *ngIf="showCorModal">
+  <div class="modal-backdrop fade" [class.show]="showCorModal" (click)="closeCorModal()"></div>
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="bi bi-gear-fill me-2"></i>Manage COR Codes
+        </h5>
+        <button type="button" class="btn-close" (click)="closeCorModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <!-- Available COR Codes -->
+          <div class="col-md-5">
+            <div class="card shadow-sm">
+              <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                  <i class="bi bi-list-ul me-2"></i>Available COR codes ({{ filteredAvailableCors.length }})
+                </h5>
+              </div>
+              <div class="card-body p-0">
+                <div class="p-3 border-bottom">
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    placeholder="Filter COR codes..." 
+                    [(ngModel)]="filterAvailableCor"
+                  >
+                </div>
+                <div class="dual-select-list">
+                  <div 
+                    *ngFor="let cor of filteredAvailableCors" 
+                    class="dual-select-item"
+                    [class.selected]="isAvailableCorSelected(cor.id)"
+                  >
+                    <label class="d-flex align-items-start w-100 mb-0">
+                      <input 
+                        type="checkbox" 
+                        class="form-check-input mt-1 me-2"
+                        [checked]="isAvailableCorSelected(cor.id)"
+                        (change)="onAvailableCorSelectionChange(cor.id, $event)"
+                      >
+                      <div class="flex-grow-1">
+                        <div class="fw-bold">{{ cor.name }}</div>
+                        <small class="text-muted">
+                          {{ cor.position }} - {{ cor.department }}
+                        </small>
+                      </div>
+                    </label>
+                  </div>
+                  <div *ngIf="filteredAvailableCors.length === 0" class="text-center text-muted py-4">
+                    <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                    No COR codes available
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Control Buttons -->
+          <div class="col-md-2 d-flex flex-column justify-content-center align-items-center gap-2">
+            <button 
+              class="btn btn-primary btn-lg w-100"
+              [disabled]="availableCorSelection.length === 0"
+              (click)="moveCorToSelected()"
+              title="Move selected to assigned"
+            >
+              <i class="bi bi-chevron-right"></i>
+            </button>
+            <button 
+              class="btn btn-outline-primary w-100"
+              [disabled]="filteredAvailableCors.length === 0"
+              (click)="moveAllCorsToSelected()"
+              title="Move all to assigned"
+            >
+              <i class="bi bi-chevron-double-right"></i>
+            </button>
+            <button 
+              class="btn btn-outline-secondary w-100"
+              [disabled]="filteredSelectedCors.length === 0"
+              (click)="moveAllCorsToAvailable()"
+              title="Move all to available"
+            >
+              <i class="bi bi-chevron-double-left"></i>
+            </button>
+            <button 
+              class="btn btn-secondary btn-lg w-100"
+              [disabled]="selectedCorSelection.length === 0"
+              (click)="moveCorToAvailable()"
+              title="Move selected to available"
+            >
+              <i class="bi bi-chevron-left"></i>
+            </button>
+          </div>
+
+          <!-- Selected COR Codes -->
+          <div class="col-md-5">
+            <div class="card shadow-sm">
+              <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                  <i class="bi bi-check-circle me-2"></i>Assigned COR codes ({{ filteredSelectedCors.length }})
+                </h5>
+              </div>
+              <div class="card-body p-0">
+                <div class="p-3 border-bottom">
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    placeholder="Filter assigned..." 
+                    [(ngModel)]="filterSelectedCor"
+                  >
+                </div>
+                <div class="dual-select-list">
+                  <div 
+                    *ngFor="let cor of filteredSelectedCors" 
+                    class="dual-select-item"
+                    [class.selected]="isSelectedCorSelected(cor.id)"
+                  >
+                    <label class="d-flex align-items-start w-100 mb-0">
+                      <input 
+                        type="checkbox" 
+                        class="form-check-input mt-1 me-2"
+                        [checked]="isSelectedCorSelected(cor.id)"
+                        (change)="onSelectedCorSelectionChange(cor.id, $event)"
+                      >
+                      <div class="flex-grow-1">
+                        <div class="fw-bold">{{ cor.name }}</div>
+                        <small class="text-muted">
+                          {{ cor.position }} - {{ cor.department }}
+                        </small>
+                      </div>
+                    </label>
+                  </div>
+                  <div *ngIf="filteredSelectedCors.length === 0" class="text-center text-muted py-4">
+                    <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                    No COR codes assigned
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="row mt-4">
+          <div class="col-12">
+            <div class="alert alert-info">
+              <i class="bi bi-info-circle me-2"></i>
+              <strong>Summary:</strong> {{ selectedCors.length }} COR code(s) assigned out of {{ availableCors.length + selectedCors.length }} total
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeCorModal()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="closeCorModal()">
+          <i class="bi bi-check-circle me-1"></i>Apply
         </button>
       </div>
     </div>
