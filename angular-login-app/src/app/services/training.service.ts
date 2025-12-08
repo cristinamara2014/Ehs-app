@@ -12,9 +12,9 @@ export interface Training {
 })
 export class TrainingService {
   private trainings: Training[] = [
-    { id: 438, name: 'DEMO - Instruire telefonică 8 module', type: 'Instruire tip MODULE SCORM', language: 'ro/en' },
-    { id: 436, name: 'Demo - instruire birou', type: 'Instruire tip MODULE SCORM', language: 'ro/en' },
-    { id: 209, name: 'exemplu Instruire SSM-SU - presentare cu test', type: 'Instruire tip MODULE SCORM', language: 'ro/en' }
+    { id: 438, name: 'Video 1 - Instruire telefonică 8 module', type: 'Instruire tip MODULE SCORM', language: 'ro/en' },
+    { id: 436, name: 'Video 2 - instruire birou', type: 'Instruire tip MODULE SCORM', language: 'ro/en' },
+    { id: 209, name: 'Video 3 Instruire SSM-SU - presentare cu test', type: 'Instruire tip MODULE SCORM', language: 'ro/en' }
   ];
 
   getTrainings(): Training[] {

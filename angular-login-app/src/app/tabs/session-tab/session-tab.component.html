@@ -17,10 +17,21 @@
     </div>
 
     <div class="row">
+      <!-- Selecteaza COR -->
+      <div class="col-md-6 mb-3">
+        <h5 class="text-primary fw-bold mb-3"><i class="bi bi-briefcase me-2"></i>COR codes</h5>
+        <button type="button" class="btn btn-outline-primary w-100 mb-2" (click)="openCorModal()">
+          <i class="bi bi-gear-fill me-2"></i>Manage COR Codes
+        </button>
+        <button type="button" class="btn btn-primary w-100" (click)="saveCOR()">
+          <i class="bi bi-save me-2"></i>{{ mainComponent.translate('save') }}
+        </button>
+      </div>
+
       <!-- Instruire -->
-      <div class="col-md-4 mb-3">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <label for="instruire" class="form-label mb-0"><i class="bi bi-book me-2"></i>{{ mainComponent.translate('instruire') }}</label>
+      <div class="col-md-6 mb-3">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="text-primary fw-bold mb-0"><i class="bi bi-book me-2"></i>Training videos</h5>
           <div class="btn-group" role="group">
             <button type="button" class="btn btn-sm btn-success" (click)="openAddModal()">
               <i class="bi bi-plus-circle me-1"></i>{{ mainComponent.translate('add') }}
@@ -33,28 +44,6 @@
         <select class="form-select training-listbox" id="instruire" formControlName="instruire" [attr.size]="trainings.length > 5 ? 5 : trainings.length">
           <option *ngFor="let training of trainings" [value]="training.id">{{ training.name }}</option>
         </select>
-      </div>
-
-      <!-- Selecteaza COR -->
-      <div class="col-md-4 mb-3">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <label for="tipInitiere" class="form-label mb-0"><i class="bi bi-briefcase me-2"></i>{{ mainComponent.translate('selecteaza_cor') }}</label>
-          <button type="button" class="btn btn-sm btn-primary" (click)="saveCOR()">
-            <i class="bi bi-save me-1"></i>{{ mainComponent.translate('save') }}
-          </button>
-        </div>
-        <button type="button" class="btn btn-outline-primary w-100" (click)="openCorModal()">
-          <i class="bi bi-gear-fill me-2"></i>Manage COR Codes
-        </button>
-      </div>
-
-      <!-- Perioada de valabilitate a sesiunii & Termen limita -->
-      <div class="col-md-4 mb-3">
-        <label for="dataInceput" class="form-label"><i class="bi bi-calendar-check me-2"></i>{{ mainComponent.translate('perioada_valabilitate') }}</label>
-        <input type="datetime-local" class="form-control mb-3" id="dataInceput" formControlName="dataInceput">
-        
-        <label for="termenLimita" class="form-label"><i class="bi bi-alarm me-2"></i>{{ mainComponent.translate('termen_limita') }}</label>
-        <input type="date" class="form-control" id="termenLimita" formControlName="termenLimita">
       </div>
     </div>
 
@@ -77,7 +66,7 @@
 
       <!-- Setari -->
       <div class="col-md-4 mb-3">
-        <label class="form-label"><i class="bi bi-gear me-2"></i>{{ mainComponent.translate('setari') }}</label>
+        <h5 class="text-primary fw-bold mb-3 mt-4"><i class="bi bi-gear me-2"></i>{{ mainComponent.translate('setari') }}</h5>
         <div class="form-check">
           <input class="form-check-input" type="radio" name="tipSesiune" id="sesiuneAngajare" value="angajare" formControlName="tipSesiune">
           <label class="form-check-label" for="sesiuneAngajare">
@@ -90,6 +79,19 @@
             {{ mainComponent.translate('sesiune_periodica') }}
           </label>
         </div>
+      </div>
+    </div>
+
+    <!-- Perioada de valabilitate a sesiunii & Termen limita -->
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="dataInceput" class="form-label"><i class="bi bi-calendar-check me-2"></i>{{ mainComponent.translate('perioada_valabilitate') }}</label>
+        <input type="datetime-local" class="form-control" id="dataInceput" formControlName="dataInceput">
+      </div>
+      
+      <div class="col-md-6 mb-3">
+        <label for="termenLimita" class="form-label"><i class="bi bi-alarm me-2"></i>{{ mainComponent.translate('termen_limita') }}</label>
+        <input type="date" class="form-control" id="termenLimita" formControlName="termenLimita">
       </div>
     </div>
 

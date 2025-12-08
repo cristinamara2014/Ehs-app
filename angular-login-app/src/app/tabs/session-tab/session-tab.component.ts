@@ -72,7 +72,7 @@ export class SessionTabComponent implements OnInit {
       dataInceput: ['2025-12-02T13:43', Validators.required],
       termenLimita: ['', Validators.required],
       angajatiSelectati: [[]], // Array of selected employee IDs
-      tipSesiune: [''] // 'angajare' or 'periodica'
+      tipSesiune: ['angajare'] // 'angajare' or 'periodica' - default to 'angajare'
     });
   }
 

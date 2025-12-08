@@ -25,6 +25,8 @@
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 0.95rem;
+  font-weight: 600;
+  color: #212529;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
