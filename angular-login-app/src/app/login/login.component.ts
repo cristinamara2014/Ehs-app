@@ -24,4 +24,17 @@ export class LoginComponent {
       this.errorMessage = 'Invalid username or password';
     }
   }
+
+  onHellaAuth(): void {
+    // Redirect to Hella SSO authorization endpoint
+    const hellaAuthUrl = 'https://www.office.com/login?prompt=select_account';
+    const clientId = 'popda1'; // Replace with actual client ID
+    const redirectUri = encodeURIComponent(window.location.origin + '/auth/callback');
+    const scope = 'openid profile email';
+    
+    const authUrl = `${hellaAuthUrl}?redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
+    
+    // Redirect to Hella SSO
+    window.location.href = hellaAuthUrl;
+  }
 }

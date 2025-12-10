@@ -4,4 +4,382 @@
       <i class="bi bi-people me-2"></i>Employees
     </h2>
   </div>
+  
+  <!-- PDF Signing Section -->
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">
+        <i class="bi bi-pen me-2"></i>Sign PDF with CA Certificate
+      </h5>
+    </div>
+    <div class="card-body">
+      <!-- Certificate Source Selection -->
+      <div class="mb-4">
+        <div class="btn-group w-100" role="group">
+          <button 
+            type="button" 
+            class="btn btn-outline-primary"
+            [class.active]="!useSystemCertificate"
+            (click)="useSystemCertificate = false">
+            <i class="bi bi-file-earmark-arrow-up me-2"></i>Upload Certificate File
+          </button>
+          <button 
+            type="button" 
+            class="btn btn-outline-primary"
+            [class.active]="useSystemCertificate"
+            (click)="useSystemCertificate = true">
+            <i class="bi bi-shield-check me-2"></i>Use System Digital ID
+          </button>
+        </div>
+      </div>
+
+      <!-- System Certificate Section -->
+      <div *ngIf="useSystemCertificate" class="mb-4">
+        <div class="card bg-light border-primary">
+          <div class="card-body">
+            <h6 class="card-title text-primary">
+              <i class="bi bi-shield-lock me-2"></i>Access Your Digital Certificate
+            </h6>
+            <p class="card-text mb-3">
+              Automatically find and use certificates from Personal > Certificates with Client Authentication purpose issued to your Windows user.
+            </p>
+            
+            <div class="d-grid gap-2">
+              <button 
+                class="btn btn-primary btn-lg" 
+                (click)="accessSystemCertificates()"
+                [disabled]="isLoadingCertificates">
+                <span *ngIf="!isLoadingCertificates">
+                  <i class="bi bi-search me-2"></i>Find My Certificates
+                </span>
+                <span *ngIf="isLoadingCertificates">
+                  <span class="spinner-border spinner-border-sm me-2"></span>
+                  Searching...
+                </span>
+              </button>
+            </div>
+
+            <div class="mt-3 p-3 bg-white border rounded">
+              <h6 class="text-secondary mb-2">
+                <i class="bi bi-info-circle me-2"></i>Automatic Certificate Detection:
+              </h6>
+              <ul class="mb-0 small">
+                <li><strong>Automatic Search:</strong> Scans Personal > Certificates store</li>
+                <li><strong>Smart Filter:</strong> Only shows Client Authentication certificates</li>
+                <li><strong>User Match:</strong> Filters certificates issued to your Windows username</li>
+                <li><strong>Secure:</strong> Certificates processed locally - never uploaded to a server</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Available Certificates List -->
+        <div *ngIf="availableCertificates.length > 0" class="card mt-3 border-success">
+          <div class="card-header bg-success text-white">
+            <h6 class="mb-0">
+              <i class="bi bi-card-checklist me-2"></i>Available Signing Certificates ({{ availableCertificates.length }})
+            </h6>
+          </div>
+          <div class="card-body">
+            <p class="text-muted mb-3">Select a certificate to sign your PDF:</p>
+            
+            <div class="list-group">
+              <button 
+                *ngFor="let cert of availableCertificates; let i = index"
+                type="button"
+                class="list-group-item list-group-item-action"
+                [class.active]="selectedSystemCert?.Thumbprint === cert.Thumbprint"
+                (click)="selectCertificateFromList(cert)">
+                <div class="d-flex w-100 justify-content-between">
+                  <h6 class="mb-1">
+                    <i class="bi bi-patch-check me-2"></i>{{ cert.Subject }}
+                  </h6>
+                  <small>
+                    <span class="badge bg-primary">{{ cert.HasPrivateKey ? 'Has Private Key' : 'No Private Key' }}</span>
+                  </small>
+                </div>
+                <p class="mb-1 small">
+                  <strong>Issuer:</strong> {{ cert.Issuer }}
+                </p>
+                <small class="text-muted">
+                  <i class="bi bi-calendar-check me-1"></i>Valid: {{ cert.NotBefore }} to {{ cert.NotAfter }}
+                  <br>
+                  <i class="bi bi-fingerprint me-1"></i>Thumbprint: {{ cert.Thumbprint }}
+                </small>
+              </button>
+            </div>
+
+            <div class="alert alert-info mt-3 mb-0" role="alert">
+              <i class="bi bi-lightbulb me-2"></i>
+              <small>Click on a certificate to select it for signing. You'll be prompted to set an export password.</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Show certificate info if loaded -->
+        <div *ngIf="certificateFile" class="alert alert-success mt-3">
+          <i class="bi bi-check-circle me-2"></i>
+          <strong>Certificate Loaded:</strong> {{ certificateFile.name }}<br>
+          <small *ngIf="certificateInfo" style="white-space: pre-line;">{{ certificateInfo }}</small>
+        </div>
+
+        <!-- Signature details form for system certificate mode -->
+        <div *ngIf="certificateFile" class="mt-3">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label fw-bold">
+                  <i class="bi bi-key me-1"></i>Certificate Password
+                </label>
+                <input 
+                  type="password" 
+                  class="form-control" 
+                  [(ngModel)]="certificatePassword"
+                  (blur)="certificateFile && extractCertificateInfo(certificateFile)"
+                  placeholder="Enter certificate password (if required)">
+                <small class="text-muted">Required for .p12 and .pfx files</small>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-bold">
+                  <i class="bi bi-person me-1"></i>Signer Name *
+                </label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  [(ngModel)]="signatureName"
+                  placeholder="Enter your full name"
+                  required>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label fw-bold">
+                  <i class="bi bi-journal-text me-1"></i>Reason for Signing
+                </label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  [(ngModel)]="signatureReason"
+                  placeholder="e.g., Approval, Review">
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-bold">
+                  <i class="bi bi-geo-alt me-1"></i>Location
+                </label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  [(ngModel)]="signatureLocation"
+                  placeholder="e.g., Bucharest, Romania">
+              </div>
+            </div>
+          </div>
+
+          <div class="d-grid gap-2">
+            <button 
+              class="btn btn-success btn-lg" 
+              (click)="signPdf()"
+              [disabled]="isSigning || !certificateFile || !signatureName">
+              <i class="bi bi-check-circle me-2"></i>
+              <span *ngIf="!isSigning">Sign PDF with Digital Certificate</span>
+              <span *ngIf="isSigning">
+                <span class="spinner-border spinner-border-sm me-2"></span>
+                Signing...
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- File Upload Section -->
+      <div *ngIf="!useSystemCertificate">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label fw-bold">
+              <i class="bi bi-file-earmark-lock me-1"></i>Certificate File (.p12 / .pfx / .pem / .crt)
+            </label>
+            <input 
+              type="file" 
+              class="form-control" 
+              accept=".p12,.pfx,.pem,.crt"
+              (change)="onCertificateFileSelected($event)">
+            <small class="text-muted">Select your existing CA certificate file</small>
+          </div>
+
+          <div class="mb-3" *ngIf="certificateInfo">
+            <label class="form-label fw-bold">
+              <i class="bi bi-info-circle me-1"></i>Certificate Information
+            </label>
+            <textarea 
+              class="form-control" 
+              rows="4" 
+              [value]="certificateInfo" 
+              readonly
+              style="font-size: 0.85rem; background-color: #f8f9fa;"></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">
+              <i class="bi bi-key me-1"></i>Certificate Password
+            </label>
+            <input 
+              type="password" 
+              class="form-control" 
+              [(ngModel)]="certificatePassword"
+              (blur)="certificateFile && extractCertificateInfo(certificateFile)"
+              placeholder="Enter certificate password (if required)">
+            <small class="text-muted">Required for .p12 and .pfx files</small>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">
+              <i class="bi bi-person me-1"></i>Signer Name *
+            </label>
+            <input 
+              type="text" 
+              class="form-control" 
+              [(ngModel)]="signatureName"
+              placeholder="Enter your full name (or auto-filled from certificate)"
+              required>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label fw-bold">
+              <i class="bi bi-journal-text me-1"></i>Reason for Signing
+            </label>
+            <input 
+              type="text" 
+              class="form-control" 
+              [(ngModel)]="signatureReason"
+              placeholder="e.g., Approval, Review, Acknowledgement">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">
+              <i class="bi bi-geo-alt me-1"></i>Location
+            </label>
+            <input 
+              type="text" 
+              class="form-control" 
+              [(ngModel)]="signatureLocation"
+              placeholder="e.g., Bucharest, Romania">
+          </div>
+
+          <div class="d-grid gap-2 mt-4">
+            <button 
+              class="btn btn-success btn-lg" 
+              (click)="signPdf()"
+              [disabled]="isSigning || (!certificateFile && !selectedSystemCert) || !signatureName">
+              <i class="bi bi-check-circle me-2"></i>
+              <span *ngIf="!isSigning">Sign PDF with {{ useSystemCertificate ? 'System' : 'CA' }} Certificate</span>
+              <span *ngIf="isSigning">
+                <span class="spinner-border spinner-border-sm me-2"></span>
+                Signing with Certificate...
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-info mt-3" role="alert">
+        <i class="bi bi-info-circle me-2"></i>
+        <strong>Note:</strong> You can either upload a certificate file (.p12, .pfx, .pem, or .crt) or select a certificate from your Windows Certificate Store. The certificate information will be extracted and embedded in the signed PDF. The signed document will be downloaded automatically.
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PDF Viewer Section with Certificate Signing Options -->
+  <div class="card">
+    <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">
+        <i class="bi bi-file-pdf me-2"></i>PDF Document
+      </h5>
+      <div *ngIf="availableCertificates.length > 0" class="dropdown">
+        <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="signDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="bi bi-pen me-1"></i>Sign with CA Certificate
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="signDropdown" style="max-height: 400px; overflow-y: auto; min-width: 400px;">
+          <li><h6 class="dropdown-header"><i class="bi bi-shield-check me-2"></i>Available CA Certificates</h6></li>
+          <li><hr class="dropdown-divider"></li>
+          <li *ngFor="let cert of availableCertificates">
+            <a class="dropdown-item" href="javascript:void(0)" (click)="selectCertificateFromList(cert)">
+              <div class="d-flex flex-column">
+                <strong class="text-primary">{{ cert.Subject }}</strong>
+                <small class="text-muted">Issuer: {{ cert.Issuer }}</small>
+                <small class="text-muted">
+                  <i class="bi bi-calendar-check me-1"></i>Valid: {{ cert.NotBefore }} to {{ cert.NotAfter }}
+                </small>
+                <span class="badge bg-success mt-1" style="width: fit-content;">
+                  <i class="bi bi-key me-1"></i>Has Private Key
+                </span>
+              </div>
+            </a>
+          </li>
+          <li *ngIf="availableCertificates.length === 0"><hr class="dropdown-divider"></li>
+          <li *ngIf="availableCertificates.length === 0">
+            <span class="dropdown-item-text text-muted">
+              <i class="bi bi-info-circle me-2"></i>No certificates available. Click "Find My Certificates" above.
+            </span>
+          </li>
+        </ul>
+      </div>
+      <button *ngIf="availableCertificates.length === 0" 
+        class="btn btn-warning btn-sm" 
+        (click)="accessSystemCertificates()"
+        [disabled]="isLoadingCertificates">
+        <span *ngIf="!isLoadingCertificates">
+          <i class="bi bi-search me-1"></i>Load CA Certificates
+        </span>
+        <span *ngIf="isLoadingCertificates">
+          <span class="spinner-border spinner-border-sm me-1"></span>Loading...
+        </span>
+      </button>
+    </div>
+    <div class="card-body p-0">
+      <iframe 
+        [src]="pdfUrl" 
+        style="width: 100%; height: 800px; border: none;"
+        title="Employee PDF Document">
+      </iframe>
+    </div>
+    <div *ngIf="availableCertificates.length > 0" class="card-footer bg-light">
+      <div class="d-flex justify-content-between align-items-center">
+        <small class="text-muted">
+          <i class="bi bi-info-circle me-1"></i>
+          <strong>{{ availableCertificates.length }}</strong> CA certificate(s) available for signing
+        </small>
+        <div class="btn-group btn-group-sm" role="group">
+          <button 
+            *ngFor="let cert of availableCertificates.slice(0, 3); let i = index"
+            type="button" 
+            class="btn btn-outline-primary"
+            (click)="selectCertificateFromList(cert)"
+            [title]="cert.Subject">
+            <i class="bi bi-pen me-1"></i>Sign with Cert #{{ i + 1 }}
+          </button>
+          <button 
+            *ngIf="availableCertificates.length > 3"
+            type="button" 
+            class="btn btn-outline-secondary dropdown-toggle"
+            data-bs-toggle="dropdown">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <ul *ngIf="availableCertificates.length > 3" class="dropdown-menu" style="max-height: 300px; overflow-y: auto;">
+            <li *ngFor="let cert of availableCertificates.slice(3); let i = index">
+              <a class="dropdown-item" href="javascript:void(0)" (click)="selectCertificateFromList(cert)">
+                <small>{{ cert.Subject }}</small>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
