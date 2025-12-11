@@ -5,12 +5,13 @@ import { CommonModule } from '@angular/common';
 import { HomeTabComponent } from '../tabs/home-tab/home-tab.component';
 import { SessionTabComponent } from '../tabs/session-tab/session-tab.component';
 import { EmployeesTabComponent } from '../tabs/employees-tab/employees-tab.component';
+import { EmployeecertTabComponent } from '../tabs/employeecert-tab/employeecert-tab.component';
 import { TrainingsTabComponent } from '../tabs/trainings-tab/trainings-tab.component';
 import { FisaInstruireTabComponent } from '../tabs/fisa-instruire-tab/fisa-instruire-tab.component';
 
 @Component({
   selector: 'app-main',
-  imports: [CommonModule, HomeTabComponent, SessionTabComponent, EmployeesTabComponent, TrainingsTabComponent, FisaInstruireTabComponent],
+  imports: [CommonModule, HomeTabComponent, SessionTabComponent, EmployeesTabComponent, EmployeecertTabComponent, TrainingsTabComponent, FisaInstruireTabComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
 })
@@ -25,6 +26,7 @@ export class MainComponent implements OnInit {
       'instructaj': 'Training',
       'settings': 'Settings',
       'employees': 'Employees',
+      'employees_cert': 'Certificate Sign',
       'contact': 'Contact',
       'trainings': 'Trainings',
       'fisa_instruire': 'Training Sheet',
@@ -84,6 +86,7 @@ export class MainComponent implements OnInit {
       'instructaj': 'Instructaj',
       'settings': 'Setări',
       'employees': 'Angajati',
+      'employees_cert': 'Semnare Certificat',
       'contact': 'Contact',
       'trainings': 'Cursuri',
       'fisa_instruire': 'Fisa de Instruire',

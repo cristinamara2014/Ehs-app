@@ -98,6 +98,11 @@
         </button>
       </li>
       <li class="nav-item" role="presentation">
+        <button class="nav-link" id="employeecert-tab" data-bs-toggle="tab" data-bs-target="#employeecert-tab-pane" type="button" role="tab" aria-controls="employeecert-tab-pane" aria-selected="false">
+          <i class="bi bi-shield-check"></i> {{ translate('employees_cert') }}
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
         <button class="nav-link" id="fisa-instruire-tab" data-bs-toggle="tab" data-bs-target="#fisa-instruire-tab-pane" type="button" role="tab" aria-controls="fisa-instruire-tab-pane" aria-selected="false">
           <i class="bi bi-file-earmark-text"></i> {{ translate('fisa_instruire') }}
         </button>
@@ -115,6 +120,9 @@
       </div>
       <div class="tab-pane fade" id="settings-tab-pane" role="tabpanel" aria-labelledby="settings-tab" tabindex="0">
         <app-employees-tab></app-employees-tab>
+      </div>
+      <div class="tab-pane fade" id="employeecert-tab-pane" role="tabpanel" aria-labelledby="employeecert-tab" tabindex="0">
+        <app-employeecert-tab></app-employeecert-tab>
       </div>
       <div class="tab-pane fade" id="fisa-instruire-tab-pane" role="tabpanel" aria-labelledby="fisa-instruire-tab" tabindex="0">
         <app-fisa-instruire-tab></app-fisa-instruire-tab>

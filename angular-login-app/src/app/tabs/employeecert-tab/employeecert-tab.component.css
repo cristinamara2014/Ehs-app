@@ -1,0 +1,93 @@
+/* Employee Certificate Tab Styles */
+
+.btn-group .btn.active {
+  background-color: var(--bs-primary);
+  color: white;
+}
+
+.card-header {
+  font-weight: 600;
+}
+
+.list-group-item.active {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.badge {
+  font-size: 0.75rem;
+}
+
+iframe {
+  display: block;
+  width: 100%;
+  min-height: 800px;
+}
+
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+  border-width: 0.15em;
+}
+
+/* Custom styling for signature preview */
+.signature-preview {
+  border: 2px dashed #0d6efd;
+  padding: 20px;
+  text-align: center;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+}
+
+/* Certificate info display */
+.certificate-info {
+  font-family: monospace;
+  font-size: 0.85rem;
+  white-space: pre-wrap;
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+/* Alert customization */
+.alert {
+  border-radius: 8px;
+}
+
+.alert i {
+  vertical-align: middle;
+}
+
+/* Button hover effects */
+.btn-primary:hover {
+  transform: translateY(-2px);
+  transition: transform 0.2s ease;
+}
+
+.btn-outline-primary:hover {
+  transform: translateY(-2px);
+  transition: transform 0.2s ease;
+}
+
+/* Card hover effect for certificate items */
+.list-group-item-action:hover {
+  background-color: #f8f9fa;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* Icon sizing */
+.bi {
+  vertical-align: middle;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .card-body {
+    padding: 1rem;
+  }
+  
+  iframe {
+    min-height: 500px;
+  }
+}

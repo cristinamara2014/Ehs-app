@@ -1,0 +1,165 @@
+<div class="p-4">
+  <div class="mb-4 pb-3 border-bottom">
+    <h2 class="text-primary fw-bold">
+      <i class="bi bi-shield-check me-2"></i>Employee Certificate Signing
+    </h2>
+   <div class="card mt-4 border-info">
+    <div class="card-header bg-info text-white">
+      <h6 class="mb-0">
+        <i class="bi bi-info-circle me-2"></i>How It Works
+      </h6>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="text-center mb-3">
+            <i class="bi bi-1-circle-fill text-primary" style="font-size: 2rem;"></i>
+            <h6 class="mt-2">Upload Certificate</h6>
+            <p class="small text-muted">Export your certificate from Windows Certificate Manager and upload it here</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="text-center mb-3">
+            <i class="bi bi-2-circle-fill text-primary" style="font-size: 2rem;"></i>
+            <h6 class="mt-2">Enter Password</h6>
+            <p class="small text-muted">Provide the password you set when exporting the certificate</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="text-center mb-3">
+            <i class="bi bi-3-circle-fill text-primary" style="font-size: 2rem;"></i>
+            <h6 class="mt-2">Sign & Download</h6>
+            <p class="small text-muted">Your PDF will be signed with a visible signature and ready to download</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  </div>
+   <!-- Information Section -->
+  
+  
+  <!-- PDF Signing Section -->
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">
+        <i class="bi bi-pen me-2"></i>Sign PDF with CA Certificate
+      </h5>
+    </div>
+    <div class="card-body">
+      <!-- Certificate Upload Section -->
+      <div class="mb-4">
+        <div class="card bg-light border-primary">
+          <div class="card-body">
+            <h6 class="card-title text-primary">
+              <i class="bi bi-shield-lock me-2"></i>Upload Your Digital Certificate
+            </h6>
+            <p class="card-text mb-3">
+              Select a certificate file from your computer. Your certificate is processed entirely in your browser - nothing is uploaded to a server.
+            </p>
+            
+            <div class="d-grid gap-2">
+              <button 
+                class="btn btn-primary btn-lg" 
+                (click)="browseForCertificateFile()">
+                <i class="bi bi-folder2-open me-2"></i>Browse for Certificate
+              </button>
+              
+              <button 
+                class="btn btn-outline-info" 
+                (click)="showCertificateInstructions()">
+                <i class="bi bi-question-circle me-2"></i>How to Export My Certificate
+              </button>
+            </div>
+
+            <div class="mt-3 p-3 bg-white border rounded">
+              <h6 class="text-secondary mb-2">
+                <i class="bi bi-info-circle me-2"></i>Supported Certificate Formats:
+              </h6>
+              <ul class="mb-0 small">
+                <li><strong>.pfx / .p12:</strong> Personal Information Exchange (requires password)</li>
+                <li><strong>.pem:</strong> Privacy Enhanced Mail (certificate only)</li>
+                <li><strong>.crt / .cer:</strong> Certificate file</li>
+              </ul>
+            </div>
+
+            <div class="alert alert-success mt-3 mb-0">
+              <i class="bi bi-shield-check me-2"></i>
+              <strong>Privacy First:</strong> All certificate processing happens in your browser. Your certificate and private key never leave your computer.
+            </div>
+          </div>
+        </div>
+
+        <!-- Show certificate info if loaded -->
+        <div *ngIf="certificateFile" class="alert alert-success mt-3">
+          <i class="bi bi-check-circle me-2"></i>
+          <strong>Certificate Loaded:</strong> {{ certificateFile.name }}<br>
+          <small *ngIf="certificateInfo" style="white-space: pre-line;">{{ certificateInfo }}</small>
+        </div>
+
+        <!-- Signature details form -->
+        <div *ngIf="certificateFile" class="mt-3">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="mb-3">
+                <label class="form-label fw-bold">
+                  <i class="bi bi-key me-1"></i>Certificate Password
+                </label>
+                <input 
+                  type="password" 
+                  class="form-control" 
+                  [(ngModel)]="certificatePassword"
+                  (blur)="certificateFile && extractCertificateInfo(certificateFile)"
+                  placeholder="Enter certificate password">
+                <small class="text-muted">Required for .p12 and .pfx files</small>
+              </div>
+
+              <div class="d-grid gap-2">
+                <button 
+                  class="btn btn-success btn-lg" 
+                  (click)="signPdf()"
+                  [disabled]="isSigning">
+                  <span *ngIf="!isSigning">
+                    <i class="bi bi-pen-fill me-2"></i>Sign PDF
+                  </span>
+                  <span *ngIf="isSigning">
+                    <span class="spinner-border spinner-border-sm me-2"></span>
+                    Signing...
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hidden file input -->
+      <input 
+        type="file" 
+        id="certificateInput" 
+        accept=".p12,.pfx,.pem,.crt,.cer"
+        (change)="onCertificateFileSelected($event)"
+        style="display: none;">
+    </div>
+  </div>
+
+  <!-- PDF Preview -->
+  <div class="card">
+    <div class="card-header bg-secondary text-white">
+      <h5 class="mb-0">
+        <i class="bi bi-file-pdf me-2"></i>PDF Preview
+      </h5>
+    </div>
+    <div class="card-body p-0">
+      <iframe 
+        [src]="pdfUrl" 
+        width="100%" 
+        height="800px" 
+        style="border: none;">
+      </iframe>
+    </div>
+  </div>
+
+ 
+</div>
